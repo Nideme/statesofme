@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>States of Me - Demo</title>
+    <style>
+        /* CSS */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        #logo {
+
+            text-align: left;
+
+        }
+        #logo img {
+            width: 100%;
+        }
+        #login, #register {
+            display: inline-block;
+            margin: 20px;
+            padding: 10px 20px;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #login:hover, #register:hover {
+            background-color: white;
+            color: black;
+        }
+        #welcome {
+            text-align: center;
+            
+        }
+        #categories {
+            margin-top: -15%;
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+        .category {
+            border: 1px solid white;
+            padding: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            
+        }
+        .category:hover {
+            background-color: white;
+            color: black;
+        }
+        #generateBtn {
+            display: block;
+            width: 200px;
+            margin: 50px auto;
+            padding: 10px 0;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+        #generateBtn:hover {
+            background-color: white;
+            color: black;
+        }
+        .highlight {
+            font-weight: bold;
+        }
+        #loading {
+            text-align: center;
+        }
+        #results{
+            text-align: center;
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+    </style>
+</head>
+<body>
+
+      <!-- Login and Register -->
+    <div id="login">Sign In</div>
+    <div id="register">Register</div>
+
+    <!-- Logo -->
+    <div id="logo">
+        <img src="states.of.me.ai/states.of.me.ai.001.jpeg" alt="Logo">
+    </div>
+
+
+    <!-- Categories -->
+    <div id="categories">
+        <div class="category">Genome Data</div>
+        <div class="category">Microbiome Data</div>
+        <div class="category">Health Survey</div>
+        <div class="category">Blood Tests</div>
+        <div class="category">Allergy Data</div>
+    </div>
+
+    <!-- Generate Button -->
+    <div id="generateBtn">Generate Results</div>
+
+    <!-- Loading -->
+    <div id="loading" style="display: none;">
+        <img src="loading.gif" alt="Loading">
+    </div>
+
+    <!-- Results -->
+    <div id="results"></div>
+
+    <script>
+    /* JavaScript */
+    document.getElementById("generateBtn").addEventListener("click", function() {
+        // Show loading
+        document.getElementById("loading").style.display = "block";
+
+        setTimeout(function() {
+            // Hide loading
+            document.getElementById("loading").style.display = "none";
+
+            // Show results
+            document.getElementById("results").innerHTML = `
+                <h2>Health Recommendations</h2>
+                <p><span class="highlight">Genetic Marker rs429358 (APOE):</span> Your variant rs429358 in the APOE gene shows a predisposition for late-onset Alzheimer's disease. Considering your microbiome data showing lower levels of Bifidobacterium, we recommend a diet high in prebiotics to support Bifidobacterium growth.</p>
+                <p><span class="highlight">Genetic Marker rs9939609 (FTO):</span> In combination with your survey responses, your FTO genetic variant rs9939609 suggests an increased risk of obesity. Regular exercise and a balanced diet could mitigate this risk. Consider focusing on foods low in saturated fats and high in fiber.</p>
+                <p><span class="highlight">Blood Test:</span> Your recent blood test indicates an elevated level of LDL cholesterol. Combined with your genetic predispositions, particularly the presence of the APOE E4 allele, this could indicate a risk of cardiovascular disease. Please consider a follow-up test for confirmation and consult a healthcare provider to discuss cholesterol-lowering strategies.</p>
+                <p><span class="highlight">Allergy Data:</span> Your reported allergies to pollen and the presence of the genetic variant rs2155219 suggests an increased sensitivity to seasonal allergies. Avoiding outdoor activities during high pollen count days and considering antihistamines could help in managing your allergy symptoms.</p>
+            `;
+        }, 3000); // 3 seconds delay to simulate AI processing time
+    });
+    </script>
+</body>
+</html>
+
