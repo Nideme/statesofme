@@ -1,4 +1,228 @@
-document.getElementById("login").addEventListener("click", function() {
+<!DOCTYPE html>
+<html>
+<head>
+    <title>States of Me - Demo</title>
+    <style>
+        /* CSS */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        #logo {
+            text-align: center;
+            margin-top: 50px;
+        }
+        #logo img {
+            margin-top: -10%;
+            width: 70%;
+        }
+        #login, #register {
+          
+            
+            margin: 20px;
+            padding: 10px 20px;
+            border: 1px solid white;
+            border-radius: 5px;
+            width: 10%;
+            cursor: pointer;
+        }
+        #login:hover, #register:hover {
+            background-color: white;
+            color: black;
+        }
+        #welcome {
+            text-align: center;
+            margin-top: 50px;
+        }
+        #categories {
+            display: flex;
+            justify-content: space-around;
+           
+        }
+        .category {
+            border: 1px solid white;
+            padding: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .category:hover {
+            background-color: white;
+            color: black;
+        }
+        #generateBtn {
+            display: block;
+            width: 200px;
+            margin: 50px auto;
+            padding: 10px 0;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+        #generateBtn:hover {
+            background-color: white;
+            color: black;
+        }
+        .highlight {
+            font-weight: bold;
+        }
+        #loading {
+            text-align: center;
+        }
+        #results {
+            text-align: center;
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            color: black;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+     <!-- Login and Register -->
+     <div id="login">demo version</div>
+     <div id="register">1.0</div>
+ 
+     <!-- Logo -->
+     <div id="logo">
+         <img src="states.of.me.ai.001.jpeg" alt="Logo">
+     </div>
+ 
+     <!-- Categories -->
+     <div id="categories">
+         <div class="category">Genome Data</div>
+         <div class="category">Microbiome Data</div>
+         <div class="category">Health Survey</div>
+         <div class="category">Blood Tests</div>
+         <div class="category">Allergy Data</div>
+     </div>
+ 
+     <!-- Generate Button -->
+     <div id="generateBtn">Generate Results</div>
+ 
+     <!-- Loading -->
+     <div id="loading" style="display: none;">
+         <img src="loading.gif" alt="Loading">
+     </div>
+ 
+     <!-- Login and Register Modal -->
+     <div id="authModal" class="modal">
+         <div class="modal-content">
+             <span class="close" onclick="closeModal('authModal')">&times;</span>
+             <h2>This is only very brief demo version</h2>
+             <!-- Include your auth options here -->
+         </div>
+     </div>
+ 
+     <!-- Upload Modal -->
+     <div id="uploadModal" class="modal">
+         <div class="modal-content">
+             <span class="close" onclick="closeModal('uploadModal')">&times;</span>
+             <h2>Upload Data</h2>
+             <input type="file" id="fileInput">
+         </div>
+     </div>
+ 
+     <!-- Results Modal -->
+     <div id="resultsModal" class="modal">
+         <div class="modal-content">
+             <span class="close" onclick="closeModal('resultsModal')">&times;</span>
+             <h2>Health Recommendations</h2>
+                <p><span class="highlight">Genetic Marker rs429358 (APOE):</span> Your variant rs429358 in the APOE gene shows a predisposition for late-onset Alzheimer's disease. Considering your microbiome data showing lower levels of Bifidobacterium, we recommend a diet high in prebiotics to support Bifidobacterium growth.</p>
+                <p><span class="highlight">Genetic Marker rs6025 (F5):</span> In combination with your survey responses, your genetic marker rs6025 in the F5 gene suggests an increased risk of venous thromboembolism. Regular exercise and a balanced diet could mitigate this risk.</p>
+                <p><span class="highlight">Blood Test (Fasting Glucose):</span> Your recent blood test indicates an elevated level of fasting glucose. Combined with your genetic predispositions, this could indicate a risk of developing type 2 diabetes. Please consider a follow-up test for confirmation.</p>
+                <p><span class="highlight">Allergy Data (Pollen):</span> Your reported allergies and genetic markers could suggest an increased sensitivity to pollen. Avoiding outdoor activities during high pollen seasons could help in managing your allergy symptoms.</p>
+            `;
+             <div id="results"></div>
+             
+         </div>
+     </div>
+
+    <script>
+    /* JavaScript */
+    function openModal(modalId) {
+        console.log('openModal called with:', modalId); // added logging
+        var modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = "block";
+        } else {
+            console.log('Could not find modal with id:', modalId);
+        }
+    }
+
+    function closeModal(modalId) {
+        console.log('closeModal called with:', modalId); // added logging
+        var modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = "none";
+        } else {
+            console.log('Could not find modal with id:', modalId);
+        }
+    }
+
+    document.getElementById("login").addEventListener("click", function() {
+        openModal("authModal");
+    });
+
+    document.getElementById("register").addEventListener("click", function() {
+        openModal("authModal");
+    });
+
+    var categories = document.getElementsByClassName("category");
+    for (var i = 0; i < categories.length; i++) {
+        categories[i].addEventListener("click", function() {
+            openModal("uploadModal");
+        });
+    }
+
+    document.getElementById("generateBtn").addEventListener("click", function() {
+        document.getElementById("loading").style.display = "block";
+        //Simulate async call
+        setTimeout(function(){
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("results").innerHTML = "further recommendation results will be displayed here.";
+            openModal("resultsModal");
+        },500);
+    });
+
+    document.getElementById("fileInput").addEventListener("change", function() {
+        console.log('File input changed:', this.files); // added logging
+        // Handle the file upload here
+    });
+
+    document.getElementById("login").addEventListener("click", function() {
         openModal("authModal");
     });
 
@@ -31,13 +255,9 @@ document.getElementById("login").addEventListener("click", function() {
         closeModal("uploadModal");
         closeModal("resultsModal");
     });
+    
+
+
     </script>
 </body>
 </html>
-In the change event listener for the file input, the closeModal function is called with the modal IDs (uploadModal and resultsModal) to close the modals when the file is uploaded.
-
-
-
-
-
-
