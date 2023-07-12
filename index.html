@@ -18,6 +18,9 @@
         #logo img {
             margin-top: -10%;
             width: 70%;
+            z-index: 2;
+            position: static;
+            z-index: 9999;
         }
         #login, #register {
           
@@ -28,6 +31,7 @@
             border-radius: 5px;
             width: 10%;
             cursor: pointer;
+          
         }
         #login:hover, #register:hover {
             background-color: white;
@@ -61,6 +65,7 @@
             border-radius: 5px;
             cursor: pointer;
             text-align: center;
+            z-index: 200;
         }
         #generateBtn:hover {
             background-color: white;
@@ -108,17 +113,28 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        #consultBtn {
+          
+            display: block;
+            width: 200px;
+            margin: 50px auto;
+            padding: 10px 0;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
      <!-- Login and Register -->
-     <div id="login">demo version</div>
-     <div id="register">1.0</div>
+     <div id="login">demo version 1.0</div>
+    <!-- <div id="register"></div> -->
  
      <!-- Logo -->
      <div id="logo">
-         <img src="states.of.me.ai2.001.jpeg
-             " alt="Logo">
+         <img src="states.of.me.ai2.001.jpeg" alt="Logo">
      </div>
  
      <!-- Categories -->
@@ -132,20 +148,21 @@
  
      <!-- Generate Button -->
      <div id="generateBtn">Generate Results</div>
+     <div id="consultBtn">Consult with AI</div>
  
      <!-- Loading -->
      <div id="loading" style="display: none;">
          <img src="loading.gif" alt="Loading">
      </div>
  
-     <!-- Login and Register Modal -->
+     <!-- Login and Register Modal 
      <div id="authModal" class="modal">
          <div class="modal-content">
              <span class="close" onclick="closeModal('authModal')">&times;</span>
              <h2>This is only very brief demo version</h2>
-             <!-- Include your auth options here -->
+             Include your auth options here 
          </div>
-     </div>
+     </div> -->
  
      <!-- Upload Modal -->
      <div id="uploadModal" class="modal">
@@ -170,6 +187,22 @@
              
          </div>
      </div>
+
+
+     <!-- Consult Button -->
+
+
+<!-- Consult Modal -->
+<div id="consultModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('consultModal')">&times;</span>
+        <h2>AI Consultation</h2>
+        <div id="chatLog"></div>
+        <input type="text" id="chatInput">
+        <button id="sendBtn">Send</button>
+    </div>
+</div>
+
 
     <script>
     /* JavaScript */
@@ -197,9 +230,9 @@
         openModal("authModal");
     });
 
-    document.getElementById("register").addEventListener("click", function() {
-        openModal("authModal");
-    });
+    // added loggingdocument.getElementById("register").addEventListener("click", function() {
+     // added logging   openModal("authModal");
+    // added logging });
 
     var categories = document.getElementsByClassName("category");
     for (var i = 0; i < categories.length; i++) {
@@ -227,9 +260,9 @@
         openModal("authModal");
     });
 
-    document.getElementById("register").addEventListener("click", function() {
-        openModal("authModal");
-    });
+   // added logging document.getElementById("register").addEventListener("click", function() {
+      // added logging  openModal("authModal");
+   // added logging });
 
     var categories = document.getElementsByClassName("category");
     for (var i = 0; i < categories.length; i++) {
@@ -258,7 +291,78 @@
     });
     
 
+    // Open consultation modal on button click
+document.getElementById("consultBtn").addEventListener("click", function() {
+    openModal("consultModal");
+});
+
+// Handle send button click
+document.getElementById("sendBtn").addEventListener("click", function() {
+    var chatInput = document.getElementById("chatInput");
+    appendChatMessage("user", chatInput.value);
+    chatInput.value = "";
+    // Here is where you would also want to send the message to your AI model
+    // After getting a response, append it to the chat:
+    appendChatMessage("ai", "Congratulations,you have a double TT variant on the MTHFR gene. This gene plays a crucial role in the methylation process in the body, including the metabolism of folate.A deficiency in folate could potentially lead to neural tube defects such as spina bifida in your baby.In individuals with a double TT variant on the MTHFR gene, the enzyme needed to convert dietary folate or synthetic folic acid into its active form (5-MTHF or L-5-methyltetrahydrofolate) is less efficient. This could potentially result in a relative deficiency of active folate, even when the diet or supplementation with standard folic acid is adequate.Therefore, we recommend you take a specific form of folate known as L-5-Methylfolate (5-MTHF). This is the bioactive form of folate, which means your body can utilize it directly without needing to convert it. This will ensure that you have an adequate supply of active folate in your body to support your health and your baby's development. ");
+
+});
+
+// Append chat message to chat log
+function appendChatMessage(sender, message) {
+    var chatLog = document.getElementById("chatLog");
+    var messageElem = document.createElement("p");
+    messageElem.textContent = sender + ": " + message;
+    chatLog.appendChild(messageElem);
+}
+
+// Handle enter key in chat input
+document.getElementById("chatInput").addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+        // Trigger the send button click event
+        document.getElementById("sendBtn").click();
+    }
+});
+
+
+const express = require('express');
+const axios = require('axios');
+const app = express();
+app.use(express.json());
+
+app.post('/airesponse', async (req, res) => {
+    const userInput = req.body.userInput;
+    
+    try {
+        const response = await axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', {
+            prompt: userInput,
+            max_tokens: 60,
+        }, {
+            headers: {
+                'Authorization': 'Bearer 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',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const aiResponse = response.data.choices[0].text;
+        res.json({ aiResponse });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error calling OpenAI API' });
+    }
+});
+
+app.listen(3000, () => console.log('Server started'));
+
+
+
+
+
 
     </script>
 </body>
 </html>
+
+
+
+
+
